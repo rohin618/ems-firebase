@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContest";
 const Header = () => {
     const name = "EMS";
     const { Auth, Role, userName, logout } = useAuthContext();
     const navigate = useNavigate();
+    useEffect(() => {
+        if (Auth && Role) {
+            navigate(Role === 'HR' ? '/hrinfo' : '/emsinfo');
+        }
+    }, [Auth, Role, navigate]);
     const handleLogout = () => {
         logout();
         navigate('/login');

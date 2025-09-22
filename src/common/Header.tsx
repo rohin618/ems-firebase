@@ -7,7 +7,11 @@ const Header: React.FC = () => {
   const { Auth, Role, userName, logout } = useAuthContext();
   const navigate = useNavigate();
 
- 
+  useEffect(() => {
+    if (Auth && Role) {
+      navigate(Role === 'HR' ? '/hrinfo' : '/emsinfo');
+    }
+  }, [Auth, Role, navigate]);
 
   const handleLogout = () => {
     logout();
