@@ -29,7 +29,7 @@ const CreateEmployee: React.FC = () => {
         position: "top-right",
         autoClose: 2000,
       });
-      setTimeout(() => navigate("/CreationPage"), 2000); // redirect after toast
+      setTimeout(() => navigate("/hrinfo"), 2000); // redirect after toast
     } catch (error) {
       toast.error("❌ Failed to create employee");
     }
