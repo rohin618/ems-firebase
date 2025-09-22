@@ -9,6 +9,9 @@ const Header = () => {
         if (Auth && Role) {
             navigate(Role === 'HR' ? '/hrinfo' : '/emsinfo');
         }
+        else {
+            navigate('/login');
+        }
     }, [Auth, Role, navigate]);
     const handleLogout = () => {
         logout();

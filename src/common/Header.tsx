@@ -10,6 +10,8 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (Auth && Role) {
       navigate(Role === 'HR' ? '/hrinfo' : '/emsinfo');
+    }else{
+      navigate('/login');
     }
   }, [Auth, Role, navigate]);
 
