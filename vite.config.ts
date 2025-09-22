@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 
 // Replace 'ems-project' with your actual repo name
 export default defineConfig({
-  base: '/ems-project/',
+  base: '/ems-firebase/',
   plugins: [react()],
 })
