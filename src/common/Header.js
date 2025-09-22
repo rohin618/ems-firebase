@@ -6,10 +6,14 @@ const Header = () => {
     const { Auth, Role, userName, logout } = useAuthContext();
     const navigate = useNavigate();
     useEffect(() => {
-        if (Auth && Role)
-            navigate('/' + (Role === 'HR' ? 'hrinfo' : 'emsinfo  '));
-    }, []);
-    // console.log(Auth,Role);
+        if (Auth && Role) {
+            navigate(Role === 'HR' ? '/hrinfo' : '/emsinfo');
+        }
+    }, [Auth, Role, navigate]);
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
     return (React.createElement("nav", { className: "navbar navbar-expand-lg bg-light border-bottom shadow-sm" },
         React.createElement("div", { className: "container-fluid" },
             React.createElement("a", { className: "navbar-brand fw-bold text-primary", href: "#" }, name),
@@ -24,6 +28,6 @@ const Header = () => {
                         React.createElement("span", { className: "fw-semibold text-primary" },
                             "Howdy, ",
                             userName),
-                        React.createElement("button", { className: "btn btn-outline-danger", onClick: logout }, "Logout")))))))));
+                        React.createElement("button", { className: "btn btn-outline-danger", onClick: handleLogout }, "Logout")))))))));
 };
 export default Header;
