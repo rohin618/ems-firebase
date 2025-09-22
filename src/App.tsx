@@ -25,7 +25,7 @@ const App: React.FC = () => {
             path={path}
             element={
               isProtected ? (
-                <RouteProtected role={role as 'HR' | 'EMP'}>
+                <RouteProtected role={role as 'HR' | 'EMP'} path={path}>
                   <Component />
                 </RouteProtected>
               ) : (
@@ -36,6 +36,7 @@ const App: React.FC = () => {
         ))}
 
         {/* Fallback */}
+      
         <Route path="*" element={<ErrorPage />} />
       </Routes>
 

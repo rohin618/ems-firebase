@@ -1,3 +1,4 @@
+import ErrorPage from "./common/ErrorPage"
 import Login from "./common/Login"
 import HRSignUp from "./common/SignUp"
 import SignUp from "./common/SignUp"
@@ -13,4 +14,5 @@ export const RouteConfig = [
     {path:'/create',component:CreateEmployee,protected:true,role:"HR"},
     {path:'/edit/:id',component:EditEmployee,protected:true,role:"HR"},
     {path:'/emsinfo',component:ViewPage,protected:true,role:"EMP"},
+    {path:'/ems-firebase',component:ErrorPage,protected:true,role:"EMP"},
 ]
