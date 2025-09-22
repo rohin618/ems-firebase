@@ -1,11 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContest";
 
 const Header: React.FC = () => {
     const name: string = "EMS";
-    const {Auth,Role} = useAuthContext();
-    console.log(Auth,Role);
+    const {Auth,Role,userName,logout} = useAuthContext();
+    const navigate = useNavigate();
+    useEffect(() =>{
+      if(Auth && Role)navigate('/'+ (Role === 'HR' ? 'hrinfo' : 'emsinfo  '));
+    },[])
+    // console.log(Auth,Role);
   return (
      <nav className="navbar navbar-expand-lg bg-light border-bottom shadow-sm">
             <div className="container-fluid">
@@ -37,15 +41,26 @@ const Header: React.FC = () => {
 
                    
 
-                    <div className='nav-item'>
-                        <div className='d-flex align-items-center gap-2'>
-                            {!Auth ? <><Link className='nav-link' to={"/login"}>Login</Link>/
-                        <Link className='nav-link' to={"/signup"}>Register</Link></> : 
-                        <>
-                        <span className='fw-bold text-primary'>{Role}</span>
-                        </>
-                        }
-                        </div>
+                    <div className="nav-item">
+                      <div className="d-flex align-items-center gap-3">
+                        {!Auth ? (
+                          <>
+                            <Link className="btn btn-outline-primary" to="/login">
+                              Login
+                            </Link>
+                            <Link className="btn btn-primary" to="/register">
+                              Register
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <span className="fw-semibold text-primary">Howdy, {userName}</span>
+                            <button className="btn btn-outline-danger" onClick={logout}>
+                              Logout
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                 </div>
             </div>

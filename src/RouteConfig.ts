@@ -12,5 +12,5 @@ export const RouteConfig = [
     {path:'/hrinfo',component:CreationPage,protected:true,role:"HR"},
     {path:'/create',component:CreateEmployee,protected:true,role:"HR"},
     {path:'/edit/:id',component:EditEmployee,protected:true,role:"HR"},
-    {path:'/emsinfo',component:ViewPage,protected:true,role:"ems"},
+    {path:'/emsinfo',component:ViewPage,protected:true,role:"EMP"},
 ]

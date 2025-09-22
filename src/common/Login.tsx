@@ -4,24 +4,24 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase-config";
 import { toast } from "react-toastify";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContest";
 
 const Login: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"HR" | "EMP">("HR");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
- const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { login } = useAuthContext();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      // Query Firestore by name
-      const q = query(
-        collection(db, "users"),
-        where("name", "==", name)
-      );
+      let collectionName = activeTab === "HR" ? "users" : "employee";
 
+      const q = query(collection(db, collectionName), where("name", "==", name));
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
@@ -31,27 +31,30 @@ const Login: React.FC = () => {
 
       let userData: any;
       querySnapshot.forEach((doc) => {
-        userData = doc.data();
+        userData = { id: doc.id, ...doc.data() };
       });
 
-      // Check password
+      // ✅ check password
       if (userData.password !== password) {
         setError("Incorrect password");
         return;
       }
 
-      // Check role
-      if (userData.role !== activeTab) {
+      // ✅ for EMP we don’t check role in doc, only for HR
+      if (activeTab === "HR" && userData.role !== "HR") {
         setError("Invalid role for this account");
         return;
       }
 
-      // Save token (here just uid) and role in localStorage
-      localStorage.setItem("Auth_token", querySnapshot.docs[0].id); // doc id as token
-      localStorage.setItem("role", userData.role);
+      // ✅ Save in AuthContext
+      login(userData.id, activeTab, userData.name);
 
-      toast.success(` Logged in as ${userData.role}`);
-      if(userData.role === "HR") {navigate('/hrinfo')} else {navigate('/emsinfo')}
+      toast.success(`Logged in as ${activeTab}`);
+      if (activeTab === "HR") {
+        navigate("/hrinfo");
+      } else {
+        navigate("/emsinfo");
+      }
     } catch (err: any) {
       setError(err.message);
     }

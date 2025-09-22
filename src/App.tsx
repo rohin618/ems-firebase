@@ -25,7 +25,7 @@ const App: React.FC = () => {
             path={path}
             element={
               isProtected ? (
-                <RouteProtected role={role as 'HR' | 'ems'}>
+                <RouteProtected role={role as 'HR' | 'EMP'}>
                   <Component />
                 </RouteProtected>
               ) : (

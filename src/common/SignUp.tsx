@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { db } from "../firebase-config"; // Firestore instance
 import { collection, addDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface UserProps {
   name: string;
@@ -15,7 +16,7 @@ const HRSignUp: React.FC = () => {
     password: "",
     role: "HR", // fixed role for this signup
   });
-
+const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -28,6 +29,7 @@ const HRSignUp: React.FC = () => {
       await addDoc(usersCollection, user); // store only name, password, role
       toast.success("HR registered successfully!");
       setUser({ name: "", password: "", role: "HR" }); // reset form
+        navigate('/login');
     } catch (error) {
       console.error("Error adding user:", error);
       toast.error("Failed to register HR.");
