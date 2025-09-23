@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { db } from "../firebase-config"; // Firestore instance
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -14,9 +14,11 @@ const HRSignUp: React.FC = () => {
   const [user, setUser] = useState<UserProps>({
     name: "",
     password: "",
-    role: "HR", // fixed role for this signup
+    role: "HR", // fixed role for HR
   });
-const navigate = useNavigate();
+
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -26,10 +28,22 @@ const navigate = useNavigate();
 
     try {
       const usersCollection = collection(db, "users");
-      await addDoc(usersCollection, user); // store only name, password, role
+
+      // ✅ check if username already exists
+      const q = query(usersCollection, where("name", "==", user.name));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        toast.error("Username already taken. Please choose another.");
+        return; // stop here
+      }
+
+      // ✅ if not exists, create new HR user
+      await addDoc(usersCollection, user);
       toast.success("HR registered successfully!");
+
       setUser({ name: "", password: "", role: "HR" }); // reset form
-        navigate('/login');
+      navigate("/login");
     } catch (error) {
       console.error("Error adding user:", error);
       toast.error("Failed to register HR.");
